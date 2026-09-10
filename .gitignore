@@ -1,0 +1,7 @@
+# Dependencies (not needed — this package has none)
+node_modules/
+
+# Logs and OS noise
+*.log
+.DS_Store
+Thumbs.db
