@@ -20,7 +20,7 @@
 - 产品名称与版本徽标：支持普通文字或艺术字图片
 - Hero 主标题、徽标与一句话简介
 - 浏览器标签页标题与 favicon
-- Think 行标题自定义，例如将 `Think` 替换为「深度思考」
+- 思考状态文字自定义：同时替换 `Think` 行标题与 `Deep diving...` 运行状态
 - 发送、停止按钮支持独立自定义图标
 - 品牌主色支持手动取色或从商标自动提取主色
 - 可隐藏 DSH 内测声明弹窗
@@ -84,7 +84,7 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `favicon` | 浏览器标签页图标 |
 | `sendIcon` | 发送状态图标；留空使用系统箭头 |
 | `stopIcon` | 停止状态图标；留空使用系统方块 |
-| `thinkText` | Think 行标题文字 |
+| `thinkText` | 同时替换 Think 行标题与 `Deep diving...` 运行状态文字 |
 | `colorEnabled` | 是否启用品牌主色，默认 `true` |
 | `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
 | `hideNotice` | 是否隐藏 DSH 内测声明弹窗 |
