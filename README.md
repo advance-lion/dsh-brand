@@ -31,7 +31,7 @@
 
 “启用品牌主色”默认开启。颜色留空时，插件会从商标图片中采样，选取非透明、非近白区域中占比最高的颜色；手动填写颜色时，以手动颜色为准。
 
-品牌主色只作用于以下 UI：
+设置页提供品牌色作用范围多选列表，默认全部勾选，也可以按需要只保留部分 UI：
 
 - 侧边栏操作图标
 - 工作区“项目”文件夹图标
@@ -39,7 +39,7 @@
 - `Deep diving...` 运行状态文字
 - 发送按钮与停止按钮
 
-关闭“启用品牌主色”后，上述 UI 恢复系统原配色，但不会清除已填写的颜色。
+每项可以独立勾选或取消，并提供“全选 / 全部取消”。关闭“启用品牌主色”总开关后，上述 UI 全部恢复系统原配色，但不会清除已填写颜色和作用范围选择。旧配置没有 `colorTargets` 字段时自动按全选处理。
 
 > **换肤兼容说明：** 商标、产品名称、版本徽标、浏览器标签页标题和 favicon 属于稳定品牌项，通常不会被 UI 换肤插件覆盖。品牌主色属于样式层增强；如果其他换肤插件使用了更高优先级规则，部分图标或文字颜色可能被覆盖，最终效果取决于样式加载顺序与选择器优先级。
 
@@ -85,7 +85,8 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `sendIcon` | 发送状态图标；留空使用系统箭头 |
 | `stopIcon` | 停止状态图标；留空使用系统方块 |
 | `thinkText` | 同时替换 Think 行标题与 `Deep diving...` 运行状态文字 |
-| `colorEnabled` | 是否启用品牌主色，默认 `true` |
+| `colorEnabled` | 品牌主色总开关，默认 `true` |
+| `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,diving,composer` |
 | `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
 | `hideNotice` | 是否隐藏 DSH 内测声明弹窗 |
 
@@ -111,6 +112,7 @@ C:\Users\<用户>\.dsh\dsh-brand.json
   "stopIcon": "",
   "thinkText": "深度思考",
   "colorEnabled": "true",
+  "colorTargets": "sidebar,project,think,diving,composer",
   "color": "",
   "hideNotice": "true"
 }
