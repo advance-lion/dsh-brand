@@ -1,45 +1,101 @@
 # dsh-brand · 一键品牌替换
 
-替换 DSH Web GUI 的品牌信息，方便各家二次开发分发自己的品牌：
+面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-- 商标 Logo（侧栏 + 新会话 Hero，支持图片 URL / Data URL / 文字 / Emoji）
-- 产品名称（左上角侧栏）
-- 版本徽标（侧栏名称旁的 badge）
-- Hero 主标题（新会话页大字）
-- Hero 徽标（如「预览版」）
-- 一句话简介（Hero 副标题行）
-- 浏览器标签页标题
-- 浏览器标签页图标（favicon，替换默认鱼标）
-- 隐藏 DSH 内测声明弹窗（二改分发时屏蔽启动弹窗）
+## 使用体验
 
-所有字段留空即显示官方默认；停止/卸载插件后界面完全还原。
+> 下图来自实际运行界面，会话标题、正文、路径和任务内容已经脱敏。
 
-## 安装（使用者）
+![dsh-brand 使用体验（已脱敏）](docs/images/experience-redacted.png)
 
-从 Git 仓库获取后：
+### 插件配置页
+
+> 配置值中的 Data URL、SVG 和产品信息已经脱敏。
+
+![dsh-brand 配置页（已脱敏）](docs/images/settings-redacted.png)
+
+## 特性
+
+- 商标 Logo：侧栏与新会话 Hero，支持文字、Emoji、图片 URL、Data URL 和原始 SVG
+- 产品名称与版本徽标：支持普通文字或艺术字图片
+- Hero 主标题、徽标与一句话简介
+- 浏览器标签页标题与 favicon
+- Think 行标题自定义，例如将 `Think` 替换为「深度思考」
+- 发送、停止按钮支持独立自定义图标
+- 品牌主色支持手动取色或从商标自动提取主色
+- 可隐藏 DSH 内测声明弹窗
+- 配置保存在独立 JSON 文件，便于不同厂商分发二改版本
+- 停止或卸载插件后恢复系统界面
+
+## 品牌主色作用范围
+
+“启用品牌主色”默认开启。颜色留空时，插件会从商标图片中采样，选取非透明、非近白区域中占比最高的颜色；手动填写颜色时，以手动颜色为准。
+
+品牌主色只作用于以下 UI：
+
+- 侧边栏操作图标
+- 工作区“项目”文件夹图标
+- Think / 深度思考图标与标题
+- `Deep diving...` 运行状态文字
+- 发送按钮与停止按钮
+
+关闭“启用品牌主色”后，上述 UI 恢复系统原配色，但不会清除已填写的颜色。
+
+> **换肤兼容说明：** 商标、产品名称、版本徽标、浏览器标签页标题和 favicon 属于稳定品牌项，通常不会被 UI 换肤插件覆盖。品牌主色属于样式层增强；如果其他换肤插件使用了更高优先级规则，部分图标或文字颜色可能被覆盖，最终效果取决于样式加载顺序与选择器优先级。
+
+## 安装
 
 ```powershell
-git clone <本仓库地址>
+git clone https://github.com/advance-lion/dsh-brand.git
 dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
 ```
 
-（若所用 CLI 版本支持 `github:` 规格，也可以直接
-`dsh plugin --profile web add github:<owner>/<repo>`。）
+如果当前 CLI 支持 `github:` 规格，也可以直接安装：
 
-包是纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需 `npm install` / build。
+```powershell
+dsh plugin --profile web add github:advance-lion/dsh-brand
+```
 
-安装会把这个包链接进 profile、合并 `cordis.patch.yml`（插入 `dsh-brand` 加载行）并热挂载。
-装完刷新 http://127.0.0.1:3080 ；若未出现，重启 `dsh web` 一次。
+本包为纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需运行 `npm install` 或 build。
+
+安装后访问 <http://127.0.0.1:3080>。若插件未出现，重启一次 `dsh web`，然后使用 `Ctrl+F5` 硬刷新。
 
 ## 使用
 
-打开 **设置 → 品牌 Branding**，填写字段后点「保存并应用」，即时生效无需刷新；
-「恢复默认」一键清空。
+1. 打开 **设置 → 品牌 Branding**。
+2. 填写需要替换的品牌字段。
+3. 点击“保存并应用”。
+4. 使用“恢复默认”可一键清空品牌配置。
 
-## 配置分发
+Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`；普通配置修改保存后即时生效。
 
-配置保存在 `$DSH_HOME/dsh-brand.json`（默认 `C:\Users\<用户>\.dsh\dsh-brand.json`），
-纯 JSON、跨工作区生效。二改部署只需随包分发这一个文件：
+## 配置字段
+
+| 字段 | 作用位置 |
+| --- | --- |
+| `name` | 侧栏产品名，支持文字、图片 URL、Data URL、SVG |
+| `version` | 产品名称旁的版本徽标 |
+| `headline` | 新会话 Hero 主标题 |
+| `badge` | Hero 徽标 |
+| `intro` | Hero 简介 |
+| `logoText` | 旧版兼容字段：文字或 Emoji 商标 |
+| `logoUrl` | 主商标，优先于 `logoText`；也是自动取色来源 |
+| `title` | 浏览器标签页标题 |
+| `favicon` | 浏览器标签页图标 |
+| `sendIcon` | 发送状态图标；留空使用系统箭头 |
+| `stopIcon` | 停止状态图标；留空使用系统方块 |
+| `thinkText` | Think 行标题文字 |
+| `colorEnabled` | 是否启用品牌主色，默认 `true` |
+| `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
+| `hideNotice` | 是否隐藏 DSH 内测声明弹窗 |
+
+配置保存在 `$DSH_HOME/dsh-brand.json`，默认位置为：
+
+```text
+C:\Users\<用户>\.dsh\dsh-brand.json
+```
+
+示例：
 
 ```json
 {
@@ -48,25 +104,22 @@ dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
   "headline": "探索未至之境",
   "badge": "预览版",
   "intro": "面向内部的智能体工作台",
-  "logoText": "🐳",
-  "logoUrl": "",
-  "title": "Acme Harness"
+  "logoUrl": "https://example.com/logo.svg",
+  "title": "Acme Harness",
+  "favicon": "https://example.com/favicon.svg",
+  "sendIcon": "",
+  "stopIcon": "",
+  "thinkText": "深度思考",
+  "colorEnabled": "true",
+  "color": "",
+  "hideNotice": "true"
 }
 ```
 
-| 字段 | 作用位置 |
-| --- | --- |
-| `name` | 侧栏产品名；未设 Logo 时取首字符做图标 |
-| `version` | 侧栏名称旁的版本徽标 |
-| `headline` | Hero 主标题（三项任一填写即接管 Hero 区） |
-| `badge` | Hero 徽标 pill |
-| `intro` | Hero 下方简介行 |
-| `logoText` | 无图片时的文字/Emoji 商标 |
-| `logoUrl` | 商标图片（`https://…` 或 `data:image/…`），优先于 `logoText` |
-| `title` | 浏览器标签页标题 |
-
 ## 实现说明
 
-- 走官方品牌 Slot：`sidebar.brand.mark`、`sidebar.brand.name`、`conversation.hero.brand.mark`，不碰 shell 其他区域。
-- Hero 原生「主标题/徽标」是写死的 locale 文案、不可覆盖；本插件在接管时用一个 `:has()` 作用域样式隐藏原生两段文本，由 Hero mark 槽渲染整行自定义内容，卸载即还原。
-- Host 半注册 `GET/PUT /api/dsh-brand/config` 读写配置文件；写入仅接受同源请求。
+- 使用官方品牌 Slot：`sidebar.brand.mark`、`sidebar.brand.name`、`conversation.hero.brand.mark`。
+- Host 提供同源 `GET/PUT /api/dsh-brand/config` 接口读写配置。
+- Host 在 HTML 首屏注入品牌配置，减少刷新时默认商标、标题与 favicon 闪现。
+- Hero 接管和部分精确配色使用受限作用域选择器，不修改整个应用的全局主题变量。
+- Think 标题、发送/停止状态均保留原生交互语义，仅替换显示层。
