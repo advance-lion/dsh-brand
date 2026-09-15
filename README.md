@@ -74,7 +74,8 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | 字段 | 作用位置 |
 | --- | --- |
 | `name` | 侧栏产品名，支持文字、图片 URL、Data URL、SVG |
-| `version` | 产品名称旁的版本徽标 |
+| `version` | 产品名称旁的自定义版本徽标；非空时优先于 DSH 构建版本 |
+| `useDshVersion` | 自定义版本留空时显示当前 DSH 构建 Hash/包版本，默认 `true` |
 | `headline` | 新会话 Hero 主标题 |
 | `badge` | Hero 徽标 |
 | `intro` | Hero 简介 |
@@ -101,7 +102,8 @@ C:\Users\<用户>\.dsh\dsh-brand.json
 ```json
 {
   "name": "Acme Harness",
-  "version": "v1.0.0",
+  "version": "",
+  "useDshVersion": "true",
   "headline": "探索未至之境",
   "badge": "预览版",
   "intro": "面向内部的智能体工作台",
