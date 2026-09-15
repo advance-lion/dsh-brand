@@ -1,6 +1,6 @@
 {
   "name": "dsh-brand",
-  "version": "0.1.0",
+  "version": "0.1.5-rc.1",
   "description": "One-click brand replacement for the DSH web GUI — logo, product name, version badge, hero headline/badge/intro, tab title. Config lives at $DSH_HOME/dsh-brand.json. 一键替换 DSH Web GUI 品牌信息，方便各家二改分发。",
   "type": "module",
   "main": "lib/index.js",
