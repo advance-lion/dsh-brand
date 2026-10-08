@@ -2,7 +2,7 @@
 
 面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-> 宿主版本要求：**DSH ^0.1.5-rc.1**（已在 `package.json` 的 `dsh.engines.dsh` 中声明，DSH Market 会自动检测兼容性）。已核对 **DSH v0.1.5-rc.2**：品牌 Slot、设置 Slot、插件加载接口及本插件使用的会话/侧栏结构未发生不兼容变化，当前版本可直接使用。
+> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.2** 已在 DSH 0.2.0-rc.2 的 Web UI 上实测：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。更早基线为 DSH 0.1.5-rc.1。声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测，各品牌样式未逐项验证。
 
 ## 使用体验
 
@@ -56,6 +56,12 @@ dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
 
 ```powershell
 dsh plugin --profile web add github:advance-lion/dsh-brand
+```
+
+或者下载 Releases 里的 `dsh-brand-0.2.0-rc.2.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
+
+```powershell
+dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.2.tgz
 ```
 
 本包为纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需运行 `npm install` 或 build。

@@ -1,6 +1,9 @@
 # Dependencies (not needed — this package has none)
 node_modules/
 
+# Release artifacts (built by `npm pack`)
+*.tgz
+
 # Logs and OS noise
 *.log
 .DS_Store
