@@ -2,7 +2,7 @@
 
 面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.2** 已在 DSH 0.2.0-rc.2 的 Web UI 上实测：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。更早基线为 DSH 0.1.5-rc.1。声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测，各品牌样式未逐项验证。
+> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.3** 已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），并新增鲸鱼图标与运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
 
 ## 使用体验
 
@@ -22,7 +22,8 @@
 - 产品名称与版本徽标：支持普通文字或艺术字图片
 - Hero 主标题、徽标与一句话简介
 - 浏览器标签页标题与 favicon
-- 思考状态文字自定义：同时替换 `Think` 行标题与 `Deep diving...` 运行状态
+- 思考状态文字自定义：替换 `Think` 行标题
+- 运行状态自定义：鲸鱼标记（可换图标）、鲸鱼颜色、旁边那行文字
 - 发送、停止按钮支持独立自定义图标
 - 品牌主色支持手动取色或从商标自动提取主色
 - 可隐藏 DSH 内测声明弹窗
@@ -38,7 +39,7 @@
 - 侧边栏操作图标
 - 工作区“项目”文件夹图标
 - Think / 深度思考图标与标题
-- `Deep diving...` 运行状态文字
+- 运行状态鲸鱼
 - 发送按钮与停止按钮
 
 每项可以独立勾选或取消，并提供“全选 / 全部取消”。关闭“启用品牌主色”总开关后，上述 UI 全部恢复系统原配色，但不会清除已填写颜色和作用范围选择。旧配置没有 `colorTargets` 字段时自动按全选处理。
@@ -58,10 +59,10 @@ dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
 dsh plugin --profile web add github:advance-lion/dsh-brand
 ```
 
-或者下载 Releases 里的 `dsh-brand-0.2.0-rc.2.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
+或者下载 Releases 里的 `dsh-brand-0.2.0-rc.3.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
 
 ```powershell
-dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.2.tgz
+dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.3.tgz
 ```
 
 本包为纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需运行 `npm install` 或 build。
@@ -93,9 +94,11 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `favicon` | 浏览器标签页图标 |
 | `sendIcon` | 发送状态图标；留空使用系统箭头 |
 | `stopIcon` | 停止状态图标；留空使用系统方块 |
-| `thinkText` | 同时替换 Think 行标题与 `Deep diving...` 运行状态文字 |
+| `thinkText` | 替换 Think 行标题（旧宿主上同时替换旧的 shimmer 运行状态文字）|
+| `runningIcon` | 运行状态鲸鱼标记，图片 URL / Data URL / SVG；留空使用系统鲸鱼 |
+| `runningText` | 运行状态那行文字；留空显示系统文案与「用时 X 秒」，填写会一并覆盖用时 |
 | `colorEnabled` | 品牌主色总开关，默认 `true` |
-| `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,diving,composer` |
+| `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,running,composer`；旧值 `diving` 自动迁移为 `running` |
 | `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
 | `hideNotice` | 是否隐藏 DSH 内测声明弹窗 |
 
@@ -121,8 +124,10 @@ C:\Users\<用户>\.dsh\dsh-brand.json
   "sendIcon": "",
   "stopIcon": "",
   "thinkText": "深度思考",
+  "runningIcon": "",
+  "runningText": "",
   "colorEnabled": "true",
-  "colorTargets": "sidebar,project,think,diving,composer",
+  "colorTargets": "sidebar,project,think,running,composer",
   "color": "",
   "hideNotice": "true"
 }
