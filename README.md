@@ -97,7 +97,8 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `thinkText` | 替换 Think 行标题（旧宿主上同时替换旧的 shimmer 运行状态文字）|
 | `runningIconMode` | 鲸鱼标记三态：`native` 启用系统鲸鱼（默认）/ `custom` 替换 / `hidden` 隐藏 |
 | `runningIcon` | `custom` 模式下替换鲸鱼用的图片 URL / Data URL / SVG；切回 `native` 不必清空 |
-| `runningText` | 运行状态那行文字；留空显示系统文案与「用时 X 秒」，填写会一并覆盖用时 |
+| `runningText` | 运行状态那行文字；留空显示系统文案与「用时 X 秒」，填写默认替换整行 |
+| `runningTextKeepTimer` | `true` 时 `runningText` 只替换前缀，系统那句「，用时 X 秒 ···」接在后面继续跳秒 |
 | `colorEnabled` | 品牌主色总开关，默认 `true` |
 | `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,running,composer`；旧值 `diving` 自动迁移为 `running` |
 | `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
@@ -128,6 +129,7 @@ C:\Users\<用户>\.dsh\dsh-brand.json
   "runningIcon": "",
   "runningIconMode": "native",
   "runningText": "",
+  "runningTextKeepTimer": "",
   "colorEnabled": "true",
   "colorTargets": "sidebar,project,think,running,composer",
   "color": "",
