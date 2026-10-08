@@ -2,7 +2,7 @@
 
 面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.3** 已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），并新增鲸鱼图标与运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
+> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.3** 已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），鲸鱼标记做成「启用 / 隐藏 / 替换」三态，另有运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
 
 ## 使用体验
 
@@ -23,7 +23,7 @@
 - Hero 主标题、徽标与一句话简介
 - 浏览器标签页标题与 favicon
 - 思考状态文字自定义：替换 `Think` 行标题
-- 运行状态自定义：鲸鱼标记（可换图标）、鲸鱼颜色、旁边那行文字
+- 运行状态自定义：鲸鱼标记（启用 / 隐藏 / 替换三态）、鲸鱼颜色、旁边那行文字
 - 发送、停止按钮支持独立自定义图标
 - 品牌主色支持手动取色或从商标自动提取主色
 - 可隐藏 DSH 内测声明弹窗
@@ -95,7 +95,8 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `sendIcon` | 发送状态图标；留空使用系统箭头 |
 | `stopIcon` | 停止状态图标；留空使用系统方块 |
 | `thinkText` | 替换 Think 行标题（旧宿主上同时替换旧的 shimmer 运行状态文字）|
-| `runningIcon` | 运行状态鲸鱼标记，图片 URL / Data URL / SVG；留空使用系统鲸鱼 |
+| `runningIconMode` | 鲸鱼标记三态：`native` 启用系统鲸鱼（默认）/ `custom` 替换 / `hidden` 隐藏 |
+| `runningIcon` | `custom` 模式下替换鲸鱼用的图片 URL / Data URL / SVG；切回 `native` 不必清空 |
 | `runningText` | 运行状态那行文字；留空显示系统文案与「用时 X 秒」，填写会一并覆盖用时 |
 | `colorEnabled` | 品牌主色总开关，默认 `true` |
 | `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,running,composer`；旧值 `diving` 自动迁移为 `running` |
@@ -125,6 +126,7 @@ C:\Users\<用户>\.dsh\dsh-brand.json
   "stopIcon": "",
   "thinkText": "深度思考",
   "runningIcon": "",
+  "runningIconMode": "native",
   "runningText": "",
   "colorEnabled": "true",
   "colorTargets": "sidebar,project,think,running,composer",
