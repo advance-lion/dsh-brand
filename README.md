@@ -2,7 +2,7 @@
 
 面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.5** 相对 rc.3 修复两处问题：HMR 重载后样式表被误删，以及「侧边栏操作图标 / 项目文件夹图标」在部分宿主上因侧栏锚点失效而静默不生效；同时内置了默认品牌。rc.3 基线已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），鲸鱼标记做成「启用 / 隐藏 / 替换」三态，另有运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
+> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.6** 相对 rc.3 修复两处问题：HMR 重载后样式表被误删，以及「侧边栏操作图标 / 项目文件夹图标」因侧栏锚点依赖 DOM 形状而失效（宿主的品牌行在 Windows / Linux 上是 `button`，在 macOS 上是 `span`）；同时内置了默认品牌。品牌主色锚点不再按平台或 DOM 形状判断，macOS / Windows / Linux 以及同一套 Web 界面的其它平台表现一致。rc.3 基线已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），鲸鱼标记做成「启用 / 隐藏 / 替换」三态，另有运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
 
 ## 使用体验
 
@@ -60,10 +60,10 @@ dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
 dsh plugin --profile web add github:advance-lion/dsh-brand
 ```
 
-或者下载 Releases 里的 `dsh-brand-0.2.0-rc.5.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
+或者下载 Releases 里的 `dsh-brand-0.2.0-rc.6.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
 
 ```powershell
-dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.5.tgz
+dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.6.tgz
 ```
 
 本包为纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需运行 `npm install` 或 build。
