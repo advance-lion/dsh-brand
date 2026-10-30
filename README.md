@@ -2,7 +2,7 @@
 
 面向 DSH Web GUI 二次开发的一键品牌插件。无需修改或重新构建 Web Shell，在 **设置 → 品牌 Branding** 中填写配置即可即时替换产品品牌。
 
-> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.4** 相对 rc.3 仅修复 HMR 重载后样式表被误删，界面行为不变；rc.3 基线已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），鲸鱼标记做成「启用 / 隐藏 / 替换」三态，另有运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
+> 宿主版本要求：**DSH `>=0.1.5-rc.1 <0.3.0`**（见 `package.json` 的 `dsh.engines.dsh`）。当前插件版本 **0.2.0-rc.5** 相对 rc.3 修复两处问题：HMR 重载后样式表被误删，以及「侧边栏操作图标 / 项目文件夹图标」在部分宿主上因侧栏锚点失效而静默不生效；同时内置了默认品牌。rc.3 基线已在 DSH 0.2.0-rc.2 的 Web UI 上核查：内置侧栏品牌占单值 Slot 优先级 `0`，本插件以 `-100` 注册侧栏 Logo 与名称，实时 Slot 检查确认两处均为活动占用；设置页与空白会话 Hero 的 Slot 亦已核查。运行状态改用宿主自带的 `data-chat-running` 标记定位：0.2.0 起产品把原来的 `Deep diving...` shimmer 文字换成了「鲸鱼 + 用时」行，旧选择器已彻底失效，因此 `diving` 目标退休为 `running`（旧值自动迁移），鲸鱼标记做成「启用 / 隐藏 / 替换」三态，另有运行文字的替换字段。更早基线为 DSH 0.1.5-rc.1；声明范围覆盖到 0.3.0 之前，但只有 0.2.0-rc.2 经过实测。
 
 ## 使用体验
 
@@ -28,6 +28,7 @@
 - 品牌主色支持手动取色或从商标自动提取主色
 - 可隐藏 DSH 内测声明弹窗
 - 配置保存在独立 JSON 文件，便于不同厂商分发二改版本
+- 内置默认品牌 lib/defaults.json：首次安装即为本发行版的商标，在设置页保存后改用用户自己的配置
 - 停止或卸载插件后恢复系统界面
 
 ## 品牌主色作用范围
@@ -59,10 +60,10 @@ dsh plugin --profile web add <克隆下来的 dsh-brand 目录>
 dsh plugin --profile web add github:advance-lion/dsh-brand
 ```
 
-或者下载 Releases 里的 `dsh-brand-0.2.0-rc.4.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
+或者下载 Releases 里的 `dsh-brand-0.2.0-rc.5.tgz`，按本地 tarball 安装（已用 pnpm 11 验证可解析安装）：
 
 ```powershell
-dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.4.tgz
+dsh plugin --profile web add <下载路径>\dsh-brand-0.2.0-rc.5.tgz
 ```
 
 本包为纯手写 ESM、零依赖、免构建，`lib/` 即产物，无需运行 `npm install` 或 build。
@@ -103,6 +104,8 @@ Host 字段发生变化或插件首次升级后，需要重启一次 `dsh web`�
 | `colorTargets` | 品牌主色作用范围，默认 `sidebar,project,think,running,composer`；旧值 `diving` 自动迁移为 `running` |
 | `color` | 品牌主色；留空时自动从 `logoUrl` 提取 |
 | `hideNotice` | 是否隐藏 DSH 内测声明弹窗 |
+
+> 首次运行时没有 `dsh-brand.json`，插件直接使用包内自带的默认品牌 `lib/defaults.json`（本发行版内置 ORiSUNG 商标）。在设置页点「保存并应用」后，配置会写入 `$DSH_HOME/dsh-brand.json` 并覆盖内置默认；删掉该文件即可回到内置默认。二次分发的厂商只需替换 `lib/defaults.json`，无需改动代码。
 
 配置保存在 `$DSH_HOME/dsh-brand.json`，默认位置为：
 
